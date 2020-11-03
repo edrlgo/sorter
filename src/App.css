@@ -3,19 +3,29 @@
   margin: 20px 20px 20px 20px;
 }
 
-button {
-  width: 200px;
-  height: 200px;
-}
-
 table {
   border-collapse: collapse;
   border: 1px solid #000;
-  margin-top: 50px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 50px auto 50px auto;
 }
 
 table td {
   padding: 4px 12px 4px 12px;
+}
+
+.choose-button {
+  width: 200px;
+  height: 200px;
+}
+
+.reset-button {
+  padding: 8px 50px 8px 50px;
+}
+
+.show {
+  display: block;
+}
+
+.hide {
+  display: none;
 }

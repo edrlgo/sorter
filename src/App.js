@@ -1,7 +1,21 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import './App.css';
 
-const array = ["Sweden", "Norway", "Denmark", "Finland", "Iceland", "Germany", "UK"];
+const array = [
+    "Armenia",
+    "Belarus",
+    "France",
+    "Georgia",
+    "Germany",
+    "Kazakhstan",
+    "Malta",
+    "Netherlands",
+    "Poland",
+    "Russia",
+    "Serbia",
+    "Spain",
+    "Ukraine"
+];
 
 const App = () => {
     const [items, setItems] = useState({
@@ -22,29 +36,22 @@ const App = () => {
         setItemList(newItemList);
     }, [itemList]);
 
-    useEffect(() => {
-        init(array.sort());
-    }, []);
-
-    useEffect(() => {
-        const currentItems = [...itemList];
-
-        // const history = checkHistory([currentItems.firstItem, currentItems.secondItem]);
-
+    const haveCompared = useCallback((firstItem, secondItem) => {
         let history = itemHistory.find(x => 
-            (x.add === currentItems.firstItem && x.remove === currentItems.secondItem) || 
-            (x.add === currentItems.secondItem && x.remove === currentItems.firstItem)
+            (x.add === firstItem && x.remove === secondItem) || 
+            (x.add === secondItem && x.remove === firstItem)
         );
 
         if (history !== undefined) {
-            addRank(history.add);
+            return true;
         }
 
-        setItems({
-            firstItem: currentItems.firstItem,
-            secondItem: currentItems.secondItem
-        })
-    }, [itemList, itemHistory, addRank]);
+        return false;
+    }, [itemHistory]);
+
+    useEffect(() => {
+        init(array.sort());
+    }, []);
 
     useEffect(() => {
         let firstItem = "", secondItem = "";
@@ -58,6 +65,13 @@ const App = () => {
             for (let j = 0; j < otherArr.length; j++) {
                 if (otherArr[j].rank === curRank) {
                     secondItem = otherArr[j].item;
+
+                    let compared = haveCompared(firstItem, secondItem);
+
+                    if (compared) {
+                        addRank(firstItem);
+                    }
+
                     break;
                 }
             }
@@ -76,7 +90,7 @@ const App = () => {
             firstItem: done ? items.firstItem : firstItem,
             secondItem: done ? items.secondItem : secondItem
         });
-    }, [itemList, items.firstItem, items.secondItem]);
+    }, [addRank, haveCompared, itemList, items.firstItem, items.secondItem]);
 
     const onClick = (flag) => {
         console.log(flag);
@@ -115,32 +129,38 @@ const App = () => {
         <div className="App">
             <h1>Sorter</h1>
 
-            <button onClick={(e) => onClick(0)} disabled={rankingDone}>
+            <button onClick={(e) => onClick(0)} disabled={rankingDone} className="choose-button">
                 {items.firstItem}
             </button>
 
-            <button onClick={(e) => onClick(1)} disabled={rankingDone}>
+            <button onClick={(e) => onClick(1)} disabled={rankingDone} className="choose-button">
                 {items.secondItem}
             </button>
 
-            <table border="1">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Item</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {
-                    itemList.sort((a, b) => b.rank - a.rank).map((il, i) => (
-                        <tr key={i}>
-                            <td>{i + 1}</td>
-                            <td>{il.item}</td>
+            <div className={rankingDone ? 'show' : 'hide'}>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Item</th>
                         </tr>
-                    ))
-                }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {
+                        itemList.sort((a, b) => b.rank - a.rank).map((il, i) => (
+                            <tr key={i}>
+                                <td>{i + 1}</td>
+                                <td>{il.item}</td>
+                            </tr>
+                        ))
+                    }
+                    </tbody>
+                </table>
+
+                <button className="reset-button" onClick={() => init(array.sort())}>
+                    Reset
+                </button>
+            </div>
         </div>
     );
 };
