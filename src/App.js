@@ -93,8 +93,6 @@ const App = () => {
     }, [addRank, haveCompared, itemList, items.firstItem, items.secondItem]);
 
     const onClick = (flag) => {
-        console.log(flag);
-        
         let itemAdd = flag === 0 ? items.firstItem : items.secondItem;
         let itemRemove = flag === 0 ? items.secondItem : items.firstItem;
 
