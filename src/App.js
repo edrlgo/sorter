@@ -2,7 +2,6 @@ import React, { useEffect, useState, useCallback } from 'react';
 import './App.css';
 
 const array = [
-    "Armenia",
     "Belarus",
     "France",
     "Georgia",
@@ -26,6 +25,8 @@ const App = () => {
     const [itemList, setItemList] = useState([]);
     const [itemHistory, setItemHistory] = useState([]);
     const [rankingDone, setRankingDone] = useState(false);
+    const [comparsions, setComparsions] = useState(0);
+    const [maxComparsions, setMaxComparsions] = useState(0);
 
     const addRank = useCallback((item) => {
         let newItemList = [...itemList];
@@ -33,8 +34,9 @@ const App = () => {
 
         newItemList[itemAddIndex].rank++;
 
+        setComparsions(comparsions + 1);
         setItemList(newItemList);
-    }, [itemList]);
+    }, [comparsions, itemList]);
 
     const haveCompared = useCallback((firstItem, secondItem) => {
         let history = itemHistory.find(x => 
@@ -43,10 +45,10 @@ const App = () => {
         );
 
         if (history !== undefined) {
-            return true;
+            return [true, history.add];
         }
 
-        return false;
+        return [false, ""];
     }, [itemHistory]);
 
     useEffect(() => {
@@ -68,8 +70,8 @@ const App = () => {
 
                     let compared = haveCompared(firstItem, secondItem);
 
-                    if (compared) {
-                        addRank(firstItem);
+                    if (compared[0]) {
+                        addRank(compared[1]);
                     }
 
                     break;
@@ -108,6 +110,8 @@ const App = () => {
             };
         });
 
+        setComparsions(0);
+        setMaxComparsions((newList.length * (newList.length - 1)) / 2);
         setItemList(newList);
         setItemHistory([]);
     };
@@ -127,11 +131,13 @@ const App = () => {
         <div className="App">
             <h1>Sorter</h1>
 
-            <button onClick={(e) => onClick(0)} disabled={rankingDone} className="choose-button">
+            <p>Approx. {Math.ceil((comparsions / maxComparsions) * 100)}% done</p>
+
+            <button onClick={() => onClick(0)} disabled={rankingDone} className="choose-button">
                 {items.firstItem}
             </button>
 
-            <button onClick={(e) => onClick(1)} disabled={rankingDone} className="choose-button">
+            <button onClick={() => onClick(1)} disabled={rankingDone} className="choose-button">
                 {items.secondItem}
             </button>
 

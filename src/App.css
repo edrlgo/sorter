@@ -5,7 +5,7 @@
 
 table {
   border-collapse: collapse;
-  border: 1px solid #000;
+  border: 1px solid #FFF;
   margin: 50px auto 50px auto;
 }
 
@@ -16,9 +16,12 @@ table td {
 .choose-button {
   width: 200px;
   height: 200px;
+  vertical-align: middle;
+  background: #CCC;
 }
 
 .reset-button {
+  background: #CCC;
   padding: 8px 50px 8px 50px;
 }
 
