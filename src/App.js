@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import './App.css';
+import Textbox from './components/textbox';
 
 const array = [
     "Belarus",
@@ -130,6 +131,8 @@ const App = () => {
     return (
         <div className="App">
             <h1>Sorter</h1>
+
+            <Textbox onClick={e => init(e.split(/\r*\n/).sort())} />
 
             <p>Approx. {Math.ceil((comparsions / maxComparsions) * 100)}% done</p>
 

@@ -1,0 +1,11 @@
+textarea {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.start-button {
+    background: #CCC;
+    padding: 8px 50px 8px 50px;
+    margin-top: 8px;
+}
